@@ -10,6 +10,7 @@ import GameplayKit
 
 class GameScene: SKScene {
     var ball = SKShapeNode()
+    var brick = SKSpriteNode()
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
@@ -21,6 +22,7 @@ class GameScene: SKScene {
     func resetGame() {
         // this stuff happens before each game starts
         makeBall()
+        makeBrick()
     }
     
     func createBackround() {
@@ -62,5 +64,15 @@ class GameScene: SKScene {
         ball.physicsBody?.contactTestBitMask = (ball.physicsBody?.collisionBitMask)!
         
         addChild(ball) // add ball object to the view
+    }
+    
+    func makeBrick() {
+        brick.removeFromParent() // remove the brick if it exists
+        brick = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 20))
+        brick.position = CGPoint(x: frame.midX, y: frame.maxY - 50)
+        brick.name = "Brick"
+        brick.physicsBody = SKPhysicsBody(rectangleOf: brick.size)
+        brick.physicsBody?.isDynamic = false
+        addChild(brick)
     }
 }
