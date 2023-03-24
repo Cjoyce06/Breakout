@@ -63,14 +63,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.node?.name == "brick" ||
             contact.bodyB.node?.name == "brick" {
-                print("You win!")
-                brick.removeFromParent()
-                ball.removeFromParent()
+               gameOver(winner: true)
             }
         if contact.bodyA.node?.name == "loseZone" ||
             contact.bodyB.node?.name == "loseZone" {
-            print("You lose!")
-            ball.removeFromParent()
+           gameOver(winner: false)
         }
     }
     
@@ -89,7 +86,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func updateLables() {
         scoreLabel.text = "Score: \(score)"
-        livesLabel.text = "Lives: \(score)"
+        livesLabel.text = "Lives: \(lives)"
     }
     
     func createBackround() {
@@ -112,7 +109,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         ball.position = CGPoint(x: frame.midX, y: frame.midY)
         ball.strokeColor = .black
         ball.fillColor = .yellow
-        ball.name = "Ball"
+        ball.name = "ball"
         
         // physics shape matches ball image
         ball.physicsBody = SKPhysicsBody(circleOfRadius: 10)
@@ -137,7 +134,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         brick.removeFromParent() // remove the brick if it exists
         brick = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 20))
         brick.position = CGPoint(x: frame.midX, y: frame.maxY - 50)
-        brick.name = "Brick"
+        brick.name = "brick"
         brick.physicsBody = SKPhysicsBody(rectangleOf: brick.size)
         brick.physicsBody?.isDynamic = false
         addChild(brick)
@@ -180,5 +177,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         paddle.physicsBody = SKPhysicsBody(rectangleOf: paddle.size)
         paddle.physicsBody?.isDynamic = false
         addChild(paddle)
+    }
+    
+    func gameOver(winner: Bool) {
+        playingGame = false
+        playLabel.alpha = 1
+        resetGame()
+        if winner {
+            playLabel.text = "You win! Tap to play again"
+        }
+        else {
+            playLabel.text = "You lose! Tap to play again"
+        }
     }
 }
