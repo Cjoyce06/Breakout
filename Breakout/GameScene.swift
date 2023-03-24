@@ -12,6 +12,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var ball = SKShapeNode()
     var brick = SKSpriteNode()
     var loseZone = SKSpriteNode()
+    var paddle = SKSpriteNode()
     private var label : SKLabelNode?
     private var spinnyNode : SKShapeNode?
     
@@ -24,10 +25,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         kickBall()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            paddle.position.x = location.x
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches {
+            let location = touch.location(in: self)
+            paddle.position.x = location.x
+        }
+    }
+    
     func resetGame() {
         // this stuff happens before each game starts
         makeBall()
         makeBrick()
+        makePaddle()
     }
      
     func kickBall() {
@@ -93,5 +109,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         loseZone.physicsBody = SKPhysicsBody(rectangleOf: loseZone.size)
         loseZone.physicsBody?.isDynamic = false
         addChild(loseZone)
+    }
+    
+    func makePaddle() {
+        paddle.removeFromParent()
+        paddle = SKSpriteNode(color: .white, size: CGSize(width: frame.width/4, height: 20))
+        paddle.position = CGPoint(x: frame.midX, y: frame.minY + 125)
+        paddle.name = "paddle"
+        paddle.physicsBody = SKPhysicsBody(rectangleOf: paddle.size)
+        paddle.physicsBody?.isDynamic = false
+        addChild(paddle)
     }
 }
